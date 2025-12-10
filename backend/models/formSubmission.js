@@ -1,22 +1,21 @@
 const mongoose = require("mongoose");
 
-// Define the FormSubmission schema
-const formSubmissionSchema = mongoose.Schema(
+const formSubmissionSchema = new mongoose.Schema(
     {
-        clientID: { 
-            type: String,  // Store clientID as a string (UUID)
+        clientID: {
+            type: String,
             required: true
         },
-        data: { 
-            type: mongoose.Schema.Types.Mixed,  // Flexible data type to store any data structure
+        data: {
+            type: mongoose.Schema.Types.Mixed,  // accepts any dynamic fields
             required: true
         }
     },
-    { timestamps: true }
+    {
+        timestamps: true // createdAt, updatedAt
+    }
 );
 
-
-// Create the FormSubmission model
-const FormSubmission = mongoose.model("FormSubmission", formSubmissionSchema);
+const FormSubmission = mongoose.model("FormSubmission", formSubmissionSchema, "formsubmissions");
 
 module.exports = FormSubmission;

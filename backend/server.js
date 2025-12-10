@@ -16,7 +16,7 @@ mongoose.connect("mongodb://localhost:27017/digitech-dashboard").then(()=>{
     console.log("Error : ",err)
 })
 
-app.use("/", formRoute);
+// app.use("/", formRoute);
 app.use("/form", formRoute);  // Form routes (for form submission)
 
 

@@ -20,34 +20,38 @@ async function createForm(req, res) {
 
 async function submitForm(req, res) {
     try {
-        const { clientID, data } = req.body;  // Get clientID and form data from the request
+        const clientID = req.params.clientID;   // FIXED
+        const data = req.body;                 // whole body = dynamic fields
 
-        // Validate the form data
-        if (!clientID || !data) {
-            return res.status(400).json({ error: "clientID and form data are required." });
+        if (!data || Object.keys(data).length === 0) {
+            return res.status(400).json({ error: "Form data must not be empty." });
         }
 
-        // Validate if the client with the provided clientID exists
         const client = await Client.findOne({ clientID });
         if (!client) {
             return res.status(404).json({ error: "Client not found." });
         }
 
-        // Create a new form submission and associate it with the client
         const newFormSubmission = await FormSubmission.create({
-            clientID: client.clientID,  // Use the clientID from the Client model (UUID)
+            clientID,
             data
         });
 
         return res.status(201).json({
-            message: "Form submitted successfully",
+            message: "Form submitted successfully.",
             formSubmission: newFormSubmission
         });
+
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: "Error submitting form: " + error.message });
+        console.error("Error submitting form:", error);
+        return res.status(500).json({
+            error: "Internal Server Error",
+            details: error.message
+        });
     }
 }
+
+
 
 
 

@@ -17,7 +17,7 @@ route.get("/getClient", getAllClients);
 
 route.post("/form", createForm); 
 route.post("/client",createClient)
-route.post("/form/:clientID", submitForm);  // clientID is part of the URL
+route.post("/:clientID", submitForm);  // clientID is part of the URL
 
 
 
