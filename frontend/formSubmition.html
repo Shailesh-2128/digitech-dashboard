@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Submission</title>
+</head>
+<body>
+    <h1>Dynamic Form Submission</h1>
+
+    <!-- Form to collect dynamic data -->
+    <form id="dynamicForm">
+        <label for="field1">Field 1:</label>
+        <input type="text" id="field1" name="field1" required><br><br>
+
+        <label for="field2">Field 2:</label>
+        <input type="text" id="field2" name="field2"><br><br>
+
+
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <p id="responseMessage"></p>
+
+    <script>
+        document.getElementById("dynamicForm").addEventListener("submit", async function(event) {
+            event.preventDefault();  
+
+            // Collect form data dynamically
+            const field1 = document.getElementById("field1").value;
+            const field2 = document.getElementById("field2").value;
+
+            const clientID = "5e9adb74-d5dd-45e9-aba7-c817ece239cc";  // Use the actual clientID you want to use
+
+            try {
+                const response = await fetch(`http://localhost:8088/form/${clientID}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        clientID: clientID,  // Include the clientID
+                        data: {
+                            field1: field1,  // Use the actual value from the form
+                            field2: field2,
+                        }
+                    })
+                });
+
+                // Handle the response
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById("responseMessage").textContent = data.message || "Form submitted successfully!";
+                } else {
+                    document.getElementById("responseMessage").textContent = data.error || "Something went wrong.";
+                }
+            } catch (error) {
+                document.getElementById("responseMessage").textContent = "Error: " + error.message;
+            }
+        });
+    </script>
+</body>
+</html>
